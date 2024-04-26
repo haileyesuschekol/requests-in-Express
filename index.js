@@ -42,12 +42,9 @@ app.post("/api/course", (req, res) => {
     name: Joi.string().min(3).max(30).required(),
   })
 
-  const { error, value } = schema.validate({ name: req.body })
+  const { error, value } = schema.validate({ name: req.body.name })
 
-  console.log(value)
-  console.log(error)
-
-  if (!error) {
+  if (error) {
     // 400 bad request
     res.status(400).send(error.details[0].message)
     return
