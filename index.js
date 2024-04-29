@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 })
 
 app.get("/api/course", (req, res) => {
-  res.send(JSON.stringify({ name: "node.js" }))
+  res.send(courses)
 })
 // route parameter
 app.get("/api/course/:fname/:lname", (req, res) => {
@@ -25,15 +25,15 @@ app.get("/api/course/:fname/:lname", (req, res) => {
 app.get("/api/course/1", (req, res) => {
   res.send(req.query)
 })
-//get method with specific id
 
+//get method with specific id
 app.get("/api/course/:id", (req, res) => {
   const rq = req.params.id
   console.log(rq)
   const course = courses.find((search) => search.id === parseInt(req.params.id))
   console.log(course)
 
-  if (!course) res.status(404).send(`Sorry ${rq} id was not found`)
+  if (!course) return res.status(404).send(`Sorry ${rq} id was not found`)
   res.send(course)
 })
 
@@ -58,15 +58,13 @@ app.post("/api/course", (req, res) => {
   res.send(courses)
 })
 
-app.put("/api/course/:id", (req, res) => {
-  const update = courses.find(
-    (search) => parseInt(req.params.name) === search.id
-  )
-  if (!update) res.status(404).send("Bad request")
+// update request
 
-  const schema = Joi.object({
-    name: Joi.string().min(3).max(30).required(),
-  })
+app.put("/api/course/:id", (req, res) => {
+  const course = courses.find((search) => parseInt(req.params.id) === search.id)
+  if (!course) return res.status(404).send("Bad request")
+
+  const schema = validateCourse()
 
   const { error, value } = schema.validate({ name: req.body.name })
   if (error) {
@@ -75,7 +73,18 @@ app.put("/api/course/:id", (req, res) => {
     return
   }
 
-  courses.name = req.params.name
+  course.name = req.body.name
+
+  res.send(course)
+})
+
+// delete
+
+app.delete("/api/course/:id", (req, res) => {
+  const course = courses.find((search) => parseInt(req.params.id) === search.id)
+  if (!course) return res.status(404).send("Bad request")
+  const del = courses.indexOf(course)
+  courses.splice(del, 1)
   res.send(courses)
 })
 
@@ -83,3 +92,11 @@ const port = process.env.PORT || 3000
 app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
+
+function validateCourse() {
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(30).required(),
+  })
+
+  return schema
+}
