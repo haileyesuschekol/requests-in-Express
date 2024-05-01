@@ -1,3 +1,5 @@
+const helmet = require("helmet")
+const morgan = require("morgan")
 const express = require("express")
 const Joi = require("joi")
 const app = express()
@@ -8,6 +10,9 @@ const auth = require("./auth")
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
+// third party middlewares
+app.use(morgan("tiny"))
+app.use(helmet())
 
 // custome middleware
 app.use(logger)
