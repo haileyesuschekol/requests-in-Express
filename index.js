@@ -3,8 +3,13 @@ const Joi = require("joi")
 const app = express()
 const logger = require("./logger")
 const auth = require("./auth")
-app.use(express.json())
 
+// built in middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static("public"))
+
+// custome middleware
 app.use(logger)
 app.use(auth)
 
