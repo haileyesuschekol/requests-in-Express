@@ -1,8 +1,12 @@
 const express = require("express")
 const Joi = require("joi")
 const app = express()
-
+const logger = require("./logger")
+const auth = require("./auth")
 app.use(express.json())
+
+app.use(logger)
+app.use(auth)
 
 const courses = [
   { id: 1, name: "NodeJS" },
