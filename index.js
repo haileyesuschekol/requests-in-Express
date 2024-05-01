@@ -6,12 +6,17 @@ const app = express()
 const logger = require("./logger")
 const auth = require("./auth")
 
+console.log(`Node Env: ${process.env.NODE_ENV}`)
+console.log(`app: ${app.get("env")}`)
 // built in middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
 // third party middlewares
-app.use(morgan("tiny"))
+if (app.get("env") === "development") {
+  console.log("morgan enabled ...")
+  app.use(morgan("tiny"))
+}
 app.use(helmet())
 
 // custome middleware
