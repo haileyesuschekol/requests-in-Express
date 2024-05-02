@@ -1,3 +1,4 @@
+const config = require("config")
 const helmet = require("helmet")
 const morgan = require("morgan")
 const express = require("express")
@@ -14,14 +15,18 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
 // third party middlewares
 if (app.get("env") === "development") {
-  console.log("morgan enabled ...")
   app.use(morgan("tiny"))
+  console.log("morgan enabled ...")
 }
 app.use(helmet())
 
 // custome middleware
-app.use(logger)
-app.use(auth)
+// app.use(logger)
+// app.use(auth)
+
+console.log(`App Name ${config.get("name")}`)
+console.log(`-----------------------------`)
+console.log(`App password ${config.get("mail.password")}`)
 
 const courses = [
   { id: 1, name: "NodeJS" },
