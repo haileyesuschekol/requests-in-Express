@@ -1,3 +1,5 @@
+const stDebug = require("debug")("app:startup")
+const dbDebug = require("debug")("app:db")
 const config = require("config")
 const helmet = require("helmet")
 const morgan = require("morgan")
@@ -15,9 +17,12 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
 // third party middlewares
 if (app.get("env") === "development") {
+  stDebug("morgan enabled ...")
   app.use(morgan("tiny"))
-  console.log("morgan enabled ...")
 }
+
+dbDebug("connect to db  . . .")
+
 app.use(helmet())
 
 // custome middleware
