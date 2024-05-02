@@ -1,3 +1,4 @@
+// const pug = require("pug")
 const stDebug = require("debug")("app:startup")
 const dbDebug = require("debug")("app:db")
 const config = require("config")
@@ -8,6 +9,9 @@ const Joi = require("joi")
 const app = express()
 const logger = require("./logger")
 const auth = require("./auth")
+
+// pug
+app.set("view engine", "pug")
 
 console.log(`Node Env: ${process.env.NODE_ENV}`)
 console.log(`app: ${app.get("env")}`)
@@ -40,7 +44,7 @@ const courses = [
 ]
 
 app.get("/", (req, res) => {
-  res.send("Home")
+  res.render("index", { title: "renderd", message: "PugTemplet" })
 })
 
 app.get("/api/course", (req, res) => {
